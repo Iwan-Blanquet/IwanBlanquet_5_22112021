@@ -1,5 +1,8 @@
 /*
     AFFICHER et GERER les produits sur la page d'accueil
+            **affichage DYNAMIQUE à faire**
+                **effet au survol**
+                    **loading ?**
 */
 
 // Requête API 
@@ -12,7 +15,7 @@ fetch("http://localhost:3000/api/products")
         }
     })
 
-    // Créer et gérer les balises html pour les produits
+    // Créer et gérer les articles des produits
 function loadProduct(product) {
     let a = document.createElement('a');
     a.href = `./product.html?id=${product._id}`;

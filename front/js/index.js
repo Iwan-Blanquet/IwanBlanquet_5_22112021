@@ -1,11 +1,7 @@
-/*
-    AFFICHER et GERER les produits sur la page d'accueil
-            **affichage DYNAMIQUE à faire**
-                **effet au survol**
-                    **loading ?**
-*/
+// *** AFFICHER et GERER les produits sur la page d'accueil ***
 
-// Requête API 
+
+// *** Requête API ***
 let root =  document.querySelector(".items");
 fetch("http://localhost:3000/api/products")
     .then(dataProduct => dataProduct.json())
@@ -15,7 +11,7 @@ fetch("http://localhost:3000/api/products")
         }
     })
 
-    // Créer et gérer les articles des produits
+// *** Créer et gérer les articles des produits ***
 function loadProduct(product) {
     let a = document.createElement('a');
     a.href = `./product.html?id=${product._id}`;

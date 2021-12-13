@@ -74,12 +74,12 @@ button.addEventListener("click", ()=>{
                 isPresent =true;
             }
         })
-        console.log(isPresent)
         if (isPresent == false) {
             let item = {
                 id: productId,
                 name: document.querySelector("#title").textContent,
                 colors: document.getElementById('colors').value,
+                price: document.getElementById('price').textContent,
                 quantity: document.getElementById('quantity').value
             }
             lCart.push(item); 
@@ -90,6 +90,7 @@ button.addEventListener("click", ()=>{
             id: productId,
             name: document.querySelector("#title").textContent,
             colors: document.getElementById('colors').value,
+            price: document.getElementById('price').textContent,
             quantity: document.getElementById('quantity').value
         }
         cart.push(item);

@@ -1,4 +1,4 @@
-
+let cart = localStorage.getItem('cart');
 //***Sauvegarder les données dans le localStorage ***
 function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -28,7 +28,7 @@ function loadCart() {
         divImg.classList.add('cart__item__img');
     
         let image = document.createElement('img');
-        image.src = i.imageURL;
+        image.src = i.imageUrl;
         image.alt = i.altTxt;
     
         let divContent = document.createElement('div');
@@ -69,8 +69,6 @@ function loadCart() {
         let pDelete = document.createElement('p');
         pDelete.classList.add('deleteItem');
         pDelete.textContent = 'Supprimer';
-        // pDelete.id = `${i.id}`;
-        // pDelete.classList.add(`${i.colors}`);
  
         article.appendChild(divImg);
         divImg.appendChild(image);
@@ -86,11 +84,33 @@ function loadCart() {
         divSettings.appendChild(divDelete);
         divDelete.appendChild(pDelete);
         item.appendChild(article);
+
+        // *** Affichage du nombre d'article total ***
+        document.querySelector("#totalQuantity").textContent = getTotalQuantity();
+
+        // *** Affichage du prix total ***
+        document.querySelector('#totalPrice').textContent = getTotalPrice();
     };
 }
 
 // *** Affichage du panier ***
-loadCart();
+if(window.location.href.search("cart") > 0){
+    loadCart();
+    if (cart == null || cart == []){
+        let item = document.querySelector('#cart__items');
+        let h2 = document.createElement('h2');
+        h2.textContent = 'Votre panier est vide';
+        item.appendChild(h2);
+    }
+} else {
+    //Si nous sommes sur la page confirmation
+    if(window.location.href.search("confirmation") > 0) {
+        let orderId = window.location.search.replace("?", "");
+        document.getElementById("orderId").innerHTML = orderId;
+        localStorage.removeItem('cart');
+    }
+}
+
 
 // *** Calcul du nombre total d'artcle ***
 function getTotalQuantity() {
@@ -102,9 +122,6 @@ function getTotalQuantity() {
     return quantity;
 }
 
-// *** Affichage du nombre d'article total ***
-document.querySelector("#totalQuantity").textContent = getTotalQuantity();
-
 // *** Calcul du prix total ***
 function getTotalPrice() {
     let cart = getCart(); 
@@ -114,8 +131,6 @@ function getTotalPrice() {
     }
     return price;
 }
-// *** Affichage du prix total ***
-document.querySelector('#totalPrice').textContent = getTotalPrice();
 
 // *** Supprimer un article ***
 
@@ -148,11 +163,7 @@ document.querySelectorAll('.deleteItem').forEach( (item) => {
         })
     });
 
-
-// *** Modifier la quantité d'un produit***
-
-
-// *** Changer la quantité du produit ***
+// *** Modifier la quantité du produit ***
 
 function changeQuantity(quantityEvent) {
     let cart = getCart();
@@ -180,3 +191,141 @@ let itemQuantity = document.querySelectorAll(".itemQuantity");
 for( let item of itemQuantity ) {
    item.addEventListener('change', changeQuantity);
 }
+
+// *** Formulaire ***
+
+document.querySelector('input[type="submit"]').addEventListener('click', (e)=> {
+    e.preventDefault();
+    let form = document.querySelector('form');
+
+    // *** Vérification de la validité des champs ***
+
+    validFirstName(form.firstName);
+    validLastName(form.lastName);
+    validAddress(form.address);
+    validCity(form.city);
+    validEmail(form.email);
+    
+    // *** Envoi du formulaire valide ***
+
+    if(validFirstName && validLastName && validAddress && validCity && validEmail){
+        //Création d'un objet contact (données du formulaire)
+        let contact = {
+            firstName: form.firstName.value,
+            lastName: form.lastName.value,
+            address: form.address.value,
+            city: form.city.value,
+            email: form.email.value,
+        };
+        let products = [];
+        let orderId = undefined;
+        collectOrderData();
+        sendData();
+        //Création du tableau des produits
+        function collectOrderData() {
+            let cart = getCart();
+            for(let article of cart) {
+                products.push(article.id);
+            }
+        }
+
+        //Envoi des données au server avec une requête POST
+        function sendData(){
+            let order ={
+                contact,
+                products
+            };
+            fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(order),
+        })
+            .then(response => {
+                response.json().then(data=>{
+                    orderId = data.orderId
+                    if (orderId != undefined || orderId != null) {
+                        location.href="confirmation.html?" + orderId;
+                    }
+                })
+            })
+        }   
+    }
+});
+
+function validFirstName(input) {
+    let firstNameRegExp = new RegExp("[a-zA-Z-]", "g");
+    testfirstName = firstNameRegExp.test(input.value);
+    
+    if(testfirstName) {
+        input.nextElementSibling.innerHTML = ""
+    } else {
+        if (input.validity.valueMissing) {
+            input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
+        } else {
+            input.nextElementSibling.innerHTML = "Votre Prénom ne peut contenir que des lettres."
+        }
+    }
+}
+
+function validLastName(input) {
+    let lastNameRegExp = new RegExp("[a-zA-Z-]", "g");
+    testLastName = lastNameRegExp.test(input.value);
+    
+    if(testLastName) {
+        input.nextElementSibling.innerHTML = ""
+    } else {
+        if (input.validity.valueMissing) {
+            input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
+        } else {
+            input.nextElementSibling.innerHTML = "Votre Nom ne peut contenir que des lettres."
+        }
+    }
+}
+
+function validAddress(input) {
+    let addressRegExp = new RegExp("[a-zA-Z-0-9']", "g");
+    testAddress = addressRegExp.test(input.value);
+    
+    if(testAddress) {
+        input.nextElementSibling.innerHTML = ""
+    } else {
+        if (input.validity.valueMissing) {
+            input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
+        } else {
+            input.nextElementSibling.innerHTML = "Votre Adresse ne peut pas contenir que caractères spéciaux."
+        }
+    }
+}
+
+function validCity(input) {
+    let cityRegExp = new RegExp("[a-zA-Z-']", "g");
+    testCity = cityRegExp.test(input.value);
+    
+    if(testCity) {
+        input.nextElementSibling.innerHTML = ""
+    } else {
+        if (input.validity.valueMissing) {
+            input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
+        } else {
+            input.nextElementSibling.innerHTML = "Votre Ville ne peut contenir que des lettres."
+        }
+    }
+}
+
+function validEmail(input) {
+    let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
+    testEmail = emailRegExp.test(input.value);
+    
+    if(testEmail) {
+        input.nextElementSibling.innerHTML = ""
+    } else {
+        if (input.validity.valueMissing) {
+            input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
+        } else {
+            input.nextElementSibling.innerHTML = "Votre email n'est pas valide, exemple : kolo@gmail.com."
+        }
+    }
+}
+ 

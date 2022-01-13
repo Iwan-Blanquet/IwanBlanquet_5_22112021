@@ -59,8 +59,6 @@ function loadOption(currentProduct) {
     *** Sauvegarder les données dans le localStorage ***
 */
 
-// *** A faire en plusieurs fonctions ***
-
 //***Sauvegarder les données dans le localStorage ***
 function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -106,49 +104,10 @@ function addToCart(cart){
 
 const button = document.querySelector('#addToCart');
 button.addEventListener("click", (e) => {
-
+    e.preventDefault();
     addToCart();
     if (confirm('Voulez-vous voir votre panier ?')) {
         window.location.href = "cart.html";
     }
 
 });
-
-/*
-()=>{
-    let cart = [];
-    let lCart = localStorage.getItem('cart');
-    if (lCart) {
-        lCart = JSON.parse(lCart);
-        let isPresent = false;
-        lCart.forEach (element =>{
-            if (element.id === productId && element.colors === document.getElementById('colors').value) {
-                element.quantity = parseInt(element.quantity) + parseInt(document.getElementById('quantity').value);
-                isPresent =true;
-            }
-        })
-        console.log(isPresent)
-        if (isPresent == false) {
-            let item = {
-                id: productId,
-                name: document.querySelector("#title").textContent,
-                colors: document.getElementById('colors').value,
-                quantity: document.getElementById('quantity').value
-                price: document.getElementById('price').textContent
-            }
-            lCart.push(item); 
-        }
-        cart = lCart;
-    }else{
-        let item = {
-            id: productId,
-            name: document.querySelector("#title").textContent,
-            colors: document.getElementById('colors').value,
-            quantity: document.getElementById('quantity').value
-            price: document.getElementById('price').textContent
-        }
-        cart.push(item);
-    }
-    localStorage.setItem('cart', JSON.stringify(cart));
-});
-*/

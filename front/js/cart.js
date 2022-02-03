@@ -2,6 +2,7 @@
 
 let cart = localStorage.getItem('cart');
 let isValid = true;
+let nbError = 0
 
 //***Sauvegarder les données dans le localStorage ***
 function saveCart(cart) {
@@ -119,6 +120,16 @@ if(window.location.href.search("cart") > 0){
         validAddress(form.address);
         validCity(form.city);
         validEmail(form.email);
+
+        //*** Vérification des erreurs des champs ***
+        if (nbError > 0) {
+            isValid = false;
+        } else {
+            isValid = true;
+        }
+
+        //*** réinitialisation du nombre d'erreur ***
+        nbError = 0;
         
         // *** Envoi du formulaire valide ***
         if(isValid){
@@ -258,13 +269,12 @@ for( let item of itemQuantity ) {
 // *** Validation du champ prénom ***
 function validFirstName(input) {
     let firstNameRegExp = new RegExp("[a-zA-Z-]", "g");
-    testfirstName = firstNameRegExp.test(input.value);
+    let testfirstName = firstNameRegExp.test(input.value);
     
     if(testfirstName) {
         input.nextElementSibling.innerHTML = "";
-        isValid = true;
     } else {
-        isValid = false;
+        nbError ++;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
         } else {
@@ -276,13 +286,12 @@ function validFirstName(input) {
 // *** Validation du champ nom ***
 function validLastName(input) {
     let lastNameRegExp = new RegExp("[a-zA-Z-]", "g");
-    testLastName = lastNameRegExp.test(input.value);
+    let testLastName = lastNameRegExp.test(input.value);
     
     if(testLastName) {
         input.nextElementSibling.innerHTML = "";
-        isValid = true;
     } else {
-        isValid = false;
+        nbError ++;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
         } else {
@@ -294,13 +303,12 @@ function validLastName(input) {
 // *** Validation du champ adresse ***
 function validAddress(input) {
     let addressRegExp = new RegExp("[a-zA-Z-0-9']", "g");
-    testAddress = addressRegExp.test(input.value);
+    let testAddress = addressRegExp.test(input.value);
     
     if(testAddress) {
         input.nextElementSibling.innerHTML = "";
-        isValid = true;
     } else {
-        isValid = false;
+        nbError ++;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
         } else {
@@ -312,13 +320,12 @@ function validAddress(input) {
 // *** Validation du champ ville ***
 function validCity(input) {
     let cityRegExp = new RegExp("[a-zA-Z-']", "g");
-    testCity = cityRegExp.test(input.value);
+    let testCity = cityRegExp.test(input.value);
     
     if(testCity) {
         input.nextElementSibling.innerHTML = "";
-        isValid = true;
     } else {
-        isValid = false;
+        nbError ++;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
         } else {
@@ -330,13 +337,12 @@ function validCity(input) {
 // *** Validation du champ email ***
 function validEmail(input) {
     let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
-    testEmail = emailRegExp.test(input.value);
+    let testEmail = emailRegExp.test(input.value);
     
     if(testEmail) {
         input.nextElementSibling.innerHTML = "";
-        isValid = true;
     } else {
-        isValid = false;
+        nbError ++;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
         } else {

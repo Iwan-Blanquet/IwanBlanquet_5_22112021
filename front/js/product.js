@@ -54,11 +54,6 @@ function loadOption(currentProduct) {
     });
 }
 
-/*
-    *** Evènement au click du boutton ajouter au panier ***
-    *** Sauvegarder les données dans le localStorage ***
-*/
-
 //***Sauvegarder les données dans le localStorage ***
 function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));

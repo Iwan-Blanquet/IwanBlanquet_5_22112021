@@ -1,3 +1,5 @@
+// *** AFFICHER et GERER le panier et le formulaire ***
+
 let cart = localStorage.getItem('cart');
 let isValid = true;
 
@@ -109,31 +111,17 @@ if(window.location.href.search("cart") > 0){
     document.querySelector('input[type="submit"]').addEventListener('click', (e)=> {
         e.preventDefault();
         let form = document.querySelector('form');
-        let isValid = false;
 
         // *** Vérification de la validité des champs ***
 
-        let input = form.firstName
-        let firstNameRegExp = new RegExp("[a-zA-Z-]", "g");
-        testfirstName = firstNameRegExp.test(input.value);
-        
-        if(testfirstName) {
-            input.nextElementSibling.innerHTML = ""
-        } else {
-            if (input.validity.valueMissing) {
-                input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
-            } else {
-                input.nextElementSibling.innerHTML = "Votre Prénom ne peut contenir que des lettres."
-            }
-        }
-    
+        validFirstName(form.firstName);
         validLastName(form.lastName);
         validAddress(form.address);
         validCity(form.city);
         validEmail(form.email);
         
         // *** Envoi du formulaire valide ***
-        if(validFirstName && validLastName && validAddress && validCity && validEmail){
+        if(isValid){
 
             //Création d'un objet contact (données du formulaire)
             let contact = {
@@ -273,14 +261,14 @@ function validFirstName(input) {
     testfirstName = firstNameRegExp.test(input.value);
     
     if(testfirstName) {
-        input.nextElementSibling.innerHTML = ""
+        input.nextElementSibling.innerHTML = "";
+        isValid = true;
     } else {
+        isValid = false;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
-            isValid = false;
         } else {
-            input.nextElementSibling.innerHTML = "Votre Prénom ne peut contenir que des lettres."
-            isValid = false;
+            input.nextElementSibling.innerHTML = "Votre Prénom ne peut contenir que des lettres.";
         }
     }
 }
@@ -291,14 +279,14 @@ function validLastName(input) {
     testLastName = lastNameRegExp.test(input.value);
     
     if(testLastName) {
-        input.nextElementSibling.innerHTML = ""
+        input.nextElementSibling.innerHTML = "";
+        isValid = true;
     } else {
+        isValid = false;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
-            isValid = false;
         } else {
-            input.nextElementSibling.innerHTML = "Votre Nom ne peut contenir que des lettres."
-            isValid = false;
+            input.nextElementSibling.innerHTML = "Votre Nom ne peut contenir que des lettres.";
         }
     }
 }
@@ -309,14 +297,14 @@ function validAddress(input) {
     testAddress = addressRegExp.test(input.value);
     
     if(testAddress) {
-        input.nextElementSibling.innerHTML = ""
+        input.nextElementSibling.innerHTML = "";
+        isValid = true;
     } else {
+        isValid = false;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
-            isValid = false;
         } else {
-            input.nextElementSibling.innerHTML = "Votre Adresse ne peut pas contenir que caractères spéciaux."
-            isValid = false;
+            input.nextElementSibling.innerHTML = "Votre Adresse ne peut pas contenir que caractères spéciaux.";
         }
     }
 }
@@ -327,14 +315,14 @@ function validCity(input) {
     testCity = cityRegExp.test(input.value);
     
     if(testCity) {
-        input.nextElementSibling.innerHTML = ""
+        input.nextElementSibling.innerHTML = "";
+        isValid = true;
     } else {
+        isValid = false;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
-            isValid = false;
         } else {
-            input.nextElementSibling.innerHTML = "Votre Ville ne peut contenir que des lettres."
-            isValid = false;
+            input.nextElementSibling.innerHTML = "Votre Ville ne peut contenir que des lettres.";
         }
     }
 }
@@ -345,14 +333,14 @@ function validEmail(input) {
     testEmail = emailRegExp.test(input.value);
     
     if(testEmail) {
-        input.nextElementSibling.innerHTML = ""
+        input.nextElementSibling.innerHTML = "";
+        isValid = true;
     } else {
+        isValid = false;
         if (input.validity.valueMissing) {
             input.nextElementSibling.innerHTML = "Ce champ est obligatoire.";
-            isValid = false;
         } else {
             input.nextElementSibling.innerHTML = "Votre email n'est pas valide, exemple : kolo@gmail.com."
-            isValid = false;
         }
     }
 }

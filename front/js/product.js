@@ -74,12 +74,14 @@ function addToCart(cart){
     cart = getCart();
     if (cart) {
         let isPresent = false;
+        // *** Vérifier que le produit est déjà dans le localStorage ***
         cart.forEach (element =>{
             if (element.id === productId && element.colors === document.getElementById('colors').value) {
                 element.quantity = parseInt(element.quantity) + parseInt(document.getElementById('quantity').value);
                 isPresent = true;
             };
         });
+        // *** Créer et sauvegarder le produit dans le localStorage ***
         if (isPresent == false) {
             let item = {
                 id: productId,
@@ -97,6 +99,7 @@ function addToCart(cart){
     }
 } 
 
+// *** Evènement qui permet l'ajout dans le panier ***
 const button = document.querySelector('#addToCart');
 button.addEventListener("click", (e) => {
     e.preventDefault();

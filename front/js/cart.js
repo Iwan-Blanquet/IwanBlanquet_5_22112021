@@ -101,7 +101,7 @@ function loadCart() {
 // *** Affichage du panier ***
 if(window.location.href.search("cart") > 0){
     loadCart();
-    if (cart == null || cart == []){
+    if (cart == null || cart == '[]'){
         let item = document.querySelector('#cart__items');
         let h2 = document.createElement('h2');
         h2.textContent = 'Votre panier est vide';
@@ -135,9 +135,10 @@ if(window.location.href.search("cart") > 0){
         if(isValid){
 
             // *** Vérifiez que le panier n'est pas vide ***
-            if (cart == null || cart == []) {
-                alert('votre panier est vide');
+            if (cart == null || cart == '[]') {
+                    alert('votre panier est vide');
             } else {
+
                 //Création d'un objet contact (données du formulaire)
                 let contact = {
                     firstName: form.firstName.value,
@@ -181,51 +182,7 @@ if(window.location.href.search("cart") > 0){
                         })
                     })
                 }
-            }
-
-            // //Création d'un objet contact (données du formulaire)
-            // let contact = {
-            //     firstName: form.firstName.value,
-            //     lastName: form.lastName.value,
-            //     address: form.address.value,
-            //     city: form.city.value,
-            //     email: form.email.value,
-            // };
-            // let products = [];
-            // let orderId = undefined;
-            // collectOrderData();
-            // sendData();
-
-            // //Création du tableau des produits
-            // function collectOrderData() {
-            //     let cart = getCart();
-            //     for(let article of cart) {
-            //         products.push(article.id);
-            //     }
-            // }
-
-            // //Envoi des données au server avec une requête POST
-            // function sendData(){
-            //     let order ={
-            //         contact,
-            //         products
-            //     };
-            //     fetch('http://localhost:3000/api/products/order', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(order),
-            //     })
-            //     .then(response => {
-            //         response.json().then(data=>{
-            //             orderId = data.orderId
-            //             if (orderId != undefined || orderId != null) {
-            //                 location.href="confirmation.html?" + orderId;
-            //             }
-            //         })
-            //     })
-            // }   
+            }        
         }
     });
 } else {

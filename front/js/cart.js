@@ -134,49 +134,98 @@ if(window.location.href.search("cart") > 0){
         // *** Envoi du formulaire valide ***
         if(isValid){
 
-            //Création d'un objet contact (données du formulaire)
-            let contact = {
-                firstName: form.firstName.value,
-                lastName: form.lastName.value,
-                address: form.address.value,
-                city: form.city.value,
-                email: form.email.value,
-            };
-            let products = [];
-            let orderId = undefined;
-            collectOrderData();
-            sendData();
+            // *** Vérifiez que le panier n'est pas vide ***
+            if (cart == null || cart == []) {
+                alert('votre panier est vide');
+            } else {
+                //Création d'un objet contact (données du formulaire)
+                let contact = {
+                    firstName: form.firstName.value,
+                    lastName: form.lastName.value,
+                    address: form.address.value,
+                    city: form.city.value,
+                    email: form.email.value,
+                };
+                let products = [];
+                let orderId = undefined;
+                collectOrderData();
+                sendData();
 
-            //Création du tableau des produits
-            function collectOrderData() {
-                let cart = getCart();
-                for(let article of cart) {
-                    products.push(article.id);
+                //Création du tableau des produits
+                function collectOrderData() {
+                    let cart = getCart();
+                    for(let article of cart) {
+                        products.push(article.id);
+                    }
+                }
+
+                //Envoi des données au server avec une requête POST
+                function sendData(){
+                    let order ={
+                        contact,
+                        products
+                    };
+                    fetch('http://localhost:3000/api/products/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order),
+                    })
+                    .then(response => {
+                        response.json().then(data=>{
+                            orderId = data.orderId
+                            if (orderId != undefined || orderId != null) {
+                                location.href="confirmation.html?" + orderId;
+                            }
+                        })
+                    })
                 }
             }
 
-            //Envoi des données au server avec une requête POST
-            function sendData(){
-                let order ={
-                    contact,
-                    products
-                };
-                fetch('http://localhost:3000/api/products/order', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(order),
-                })
-                .then(response => {
-                    response.json().then(data=>{
-                        orderId = data.orderId
-                        if (orderId != undefined || orderId != null) {
-                            location.href="confirmation.html?" + orderId;
-                        }
-                    })
-                })
-            }   
+            // //Création d'un objet contact (données du formulaire)
+            // let contact = {
+            //     firstName: form.firstName.value,
+            //     lastName: form.lastName.value,
+            //     address: form.address.value,
+            //     city: form.city.value,
+            //     email: form.email.value,
+            // };
+            // let products = [];
+            // let orderId = undefined;
+            // collectOrderData();
+            // sendData();
+
+            // //Création du tableau des produits
+            // function collectOrderData() {
+            //     let cart = getCart();
+            //     for(let article of cart) {
+            //         products.push(article.id);
+            //     }
+            // }
+
+            // //Envoi des données au server avec une requête POST
+            // function sendData(){
+            //     let order ={
+            //         contact,
+            //         products
+            //     };
+            //     fetch('http://localhost:3000/api/products/order', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(order),
+            //     })
+            //     .then(response => {
+            //         response.json().then(data=>{
+            //             orderId = data.orderId
+            //             if (orderId != undefined || orderId != null) {
+            //                 location.href="confirmation.html?" + orderId;
+            //             }
+            //         })
+            //     })
+            // }   
         }
     });
 } else {

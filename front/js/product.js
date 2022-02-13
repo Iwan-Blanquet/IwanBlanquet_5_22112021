@@ -103,9 +103,17 @@ function addToCart(cart){
 const button = document.querySelector('#addToCart');
 button.addEventListener("click", (e) => {
     e.preventDefault();
-    addToCart();
-    if (confirm('Voulez-vous voir votre panier ?')) {
-        window.location.href = "cart.html";
-    }
-
+    let quantity = document.getElementById('quantity').value;
+    let option = document.getElementById('colors').value;
+    if (option == "") {
+        alert(' Veuillez choisir une couleur')
+    } else if (quantity < 1 || quantity > 100){
+        alert('Vous devez choisir une quantité entre 1 et 100 !');
+    } else {
+        addToCart();
+        alert('Votre article a été ajouté au panier !');
+        if (confirm('Voulez-vous voir votre panier ?')) {
+            window.location.href = "cart.html";
+        }
+    } 
 });
